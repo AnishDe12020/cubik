@@ -29,8 +29,6 @@ const Project = async ({ params: { id } }: { params: { id: string } }) => {
   console.log("id", id);
   const project = await getProject(id);
 
-  console.log(project);
-
   if (!project) {
     notFound();
   }
@@ -64,8 +62,8 @@ const Project = async ({ params: { id } }: { params: { id: string } }) => {
           <Interactions
             projectDetails={project}
             isLoading={false}
-            preview={true}
-            team={project?.Team}
+            preview={false}
+            team={project.Team}
           />
         </Stack>
       </Container>

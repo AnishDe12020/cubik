@@ -14,7 +14,7 @@ import {
   useMediaQuery,
 } from "@/utils/chakra";
 import Link from "next/link";
-import { ProjectJoinRoundStatus } from "@prisma/client";
+import { ProjectJoinRoundStatus } from "@cubik/database";
 import { Project } from "../index";
 import Contributors from "./contributors";
 import CustomTag from "@/app/components/common/tags/CustomTag";
@@ -49,9 +49,7 @@ const ProjectCard = ({
   return (
     <LinkBox
       as={Link}
-      href={`/${username}/${projectId}/${
-        status === ProjectJoinRoundStatus.APPROVED && id
-      }`}
+      href={`/${id}`}
       w="full"
       maxW={{
         base: "92vw",

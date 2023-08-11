@@ -325,31 +325,31 @@ export const ProjectSocials = ({
   hideTitle?: boolean;
   projectDetails: Project;
 }) => {
+  console.log(projectDetails);
+
   const socials = [
     {
-      name: projectDetails?.twitter_handle ? "twitter" : undefined,
-      url: projectDetails?.twitter_handle
-        ? projectDetails?.twitter_handle
+      name: projectDetails?.twitterHandle ? "twitter" : undefined,
+      url: projectDetails?.twitterHandle
+        ? projectDetails?.twitterHandle
         : undefined,
     },
     {
-      name: projectDetails?.discord_link ? "discord" : undefined,
-      url: projectDetails?.discord_link
-        ? projectDetails?.discord_link
+      name: projectDetails?.discordLink ? "discord" : undefined,
+      url: projectDetails?.discordLink
+        ? projectDetails?.discordLink
         : undefined,
     },
     {
-      name: projectDetails?.telegram_link ? "telegram" : undefined,
+      name: projectDetails?.telegramLink ? "telegram" : undefined,
 
-      url: projectDetails?.telegram_link
-        ? projectDetails?.telegram_link
+      url: projectDetails?.telegramLink
+        ? projectDetails?.telegramLink
         : undefined,
     },
     {
-      name: projectDetails?.github_link ? "github" : undefined,
-      url: projectDetails?.github_link
-        ? projectDetails?.github_link
-        : undefined,
+      name: projectDetails?.githubLink ? "github" : undefined,
+      url: projectDetails?.githubLink ? projectDetails?.githubLink : undefined,
     },
   ];
   return (
@@ -360,35 +360,31 @@ export const ProjectSocials = ({
         </Box>
       )}
       <Wrap direction={"row"}>
-        {isLoading ? (
-          <ProjectSocialsSkeleton isLoading={isLoading} />
-        ) : (
-          socials.map(
-            (
-              link: { name: string | undefined; url: string | undefined },
-              key: Key
-            ) =>
-              link.name && (
-                <IconButton
-                  aria-label={link.name}
-                  variant={"unstyled"}
-                  fontSize={{ base: "lg", md: "xl" }}
-                  display="flex"
-                  alignItems={"center"}
-                  rounded="full"
-                  color="brand.teal6"
-                  backgroundColor="brand.teal2"
-                  key={key}
-                  icon={<SocialLinks urlName={link.name} />}
-                  _hover={{
-                    backgroundColor: "brand.teal3",
-                  }}
-                  as="a"
-                  href={link.url}
-                  target="_blank"
-                />
-              )
-          )
+        {socials.map(
+          (
+            link: { name: string | undefined; url: string | undefined },
+            key: Key
+          ) =>
+            link.name && (
+              <IconButton
+                aria-label={link.name}
+                variant={"unstyled"}
+                fontSize={{ base: "lg", md: "xl" }}
+                display="flex"
+                alignItems={"center"}
+                rounded="full"
+                color="brand.teal6"
+                backgroundColor="brand.teal2"
+                key={key}
+                icon={<SocialLinks urlName={link.name} />}
+                _hover={{
+                  backgroundColor: "brand.teal3",
+                }}
+                as="a"
+                href={link.url}
+                target="_blank"
+              />
+            )
         )}
       </Wrap>
     </VStack>
@@ -416,7 +412,7 @@ export const ProjectCreatorTeamMember = ({
           borderRadius={"8px"}
           width={{ base: "32px", md: "38px" }}
           height={{ base: "32px", md: "38px" }}
-          src={teamMember.user.profilePicture}
+          src={teamMember.user.profilePicture!}
         />
         <Box color={"white"} as="p" textStyle={{ base: "body4", md: "body3" }}>
           @{teamMember.user.username}
@@ -438,7 +434,7 @@ export const ProjectOwner = ({
 }: {
   team:
     | (Team & {
-        User: User;
+        user: User;
       })[]
     | undefined;
   isLoading: boolean;
@@ -448,13 +444,14 @@ export const ProjectOwner = ({
       <Box as="p" textStyle={{ base: "title4", md: "title3" }} color="white">
         Creators
       </Box>
-      {isLoading ? (
-        <ProjectCreatorSkeleton isLoading={isLoading} />
-      ) : (
-        team?.map((teamMember: ProjectCreatorTeamType, key: Key) => (
+      {
+        // isLoading ? (
+        // <ProjectCreatorSkeleton isLoading={isLoading} />
+        // ) :
+        team?.map((teamMember, key: Key) => (
           <ProjectCreatorTeamMember teamMember={teamMember} key={key} />
         ))
-      )}
+      }
     </VStack>
   );
 };
@@ -489,12 +486,12 @@ const getRandomProjects = (
 };
 
 export const SimilarProject = () => {
-  const { data, isLoading, isError } =
-    trpc.project.findSimilarProjects.useQuery({
-      industry: [],
-    });
+  // const { data, isLoading, isError } =
+  //   trpc.project.findSimilarProjects.useQuery({
+  //     industry: [],
+  //   });
 
-  const randomProjects = getRandomProjects(data, 3);
+  // const randomProjects = getRandomProjects(data, 3);
 
   //   if (isError) {
   //     return <ComponentErrors />;
@@ -510,7 +507,7 @@ export const SimilarProject = () => {
         Similar Projects
       </Box>
       <VStack align={"start"} w="full" gap="16px" color="#CBCBCB">
-        {randomProjects?.map((project) => (
+        {/* {randomProjects?.map((project) => (
           <Card
             as={Link}
             href={`/${project.owner.username}/${project.id}`}
@@ -527,11 +524,11 @@ export const SimilarProject = () => {
                 {project.name}
               </Box>
               <Box noOfLines={2} as="p" color="#B4B0B2" textStyle={"body5"}>
-                {project.short_description}
+                {project.shortDescription}
               </Box>
             </VStack>
           </Card>
-        ))}
+        ))} */}
       </VStack>
     </VStack>
   );
@@ -553,7 +550,7 @@ export const ProjectCreatorAndLinks = ({
   isLoading: boolean;
   preview?: boolean;
   team: (Team & {
-    User: User;
+    user: User;
   })[];
   contributors: number;
   communityContributions: number;
@@ -583,7 +580,7 @@ export const ProjectCreatorAndLinks = ({
         />
       )}
       <ProjectOwner isLoading={isLoading} team={team} />
-      <SimilarProject />
+      {/* <SimilarProject /> */}
     </VStack>
   );
 };
@@ -599,7 +596,7 @@ interface ProjectInteractionsProps {
   hackathonId?: string;
   timeline?: HackathonSchedule;
   team: (Team & {
-    User: User;
+    user: User;
   })[];
   contributors?: (Contribution & {
     user: User;
@@ -636,7 +633,8 @@ export const Interactions = ({
         contributors={contributors?.length || 0}
         communityContributions={Number(
           (
-            contributors?.reduce((acc, curr) => acc + curr.usdTotal, 0) || 0
+            contributors?.reduce((acc, curr) => acc + curr.totalUsdAmount, 0) ||
+            0
           ).toFixed(2)
         )}
         funding={funding || 0}

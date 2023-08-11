@@ -34,7 +34,8 @@ import { prisma } from "@cubik/database";
 import { createUserIx } from "@/utils/contract";
 import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 import { connection, web3 } from "@/utils/contract/sdk";
-import { TranscationModel } from "./TranscationModel";
+import { TransactionModel } from "./TransactionModel";
+import { NFTProfile } from "@/types/NFTProfile";
 export const Form = () => {
   const [userNameIsAvailable, setUserNameIsAvailable] =
     useState<boolean>(false);
@@ -43,6 +44,9 @@ export const Form = () => {
   const [transactionError, setTransactionError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [profileCreated, setProfileCreated] = useState(false);
+  const [profileNFT, setProfileNFT] = useState<NFTProfile | undefined>(
+    undefined
+  );
   // const [signingTransaction, setSigningTransaction] = useState(false);
   const { publicKey } = useWallet();
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -62,9 +66,9 @@ export const Form = () => {
     resolver: zodResolver(createUserSchema),
   });
   const {
-    isOpen: transcationIsOpen,
-    onClose: transcationOnClose,
-    onOpen: transcationOnOpen,
+    isOpen: transactionIsOpen,
+    onClose: transactionOnClose,
+    onOpen: transactionOnOpen,
   } = useDisclosure();
 
   const handleTx = async (): Promise<string | null> => {
@@ -97,14 +101,14 @@ export const Form = () => {
       setIsLoading(true);
       const txId = await handleTx();
       if (!txId) return;
-      const res = await prisma.user.update({
+      await prisma.user.update({
         where: {
           mainWallet: publicKey?.toBase58(),
         },
         data: {
           username: getValues("username"),
           profilePicture: pfp,
-          profileNft: [],
+          profileNft: profileNFT,
           tx: txId,
         },
       });
@@ -122,10 +126,10 @@ export const Form = () => {
   };
   return (
     <>
-      {transcationIsOpen && (
-        <TranscationModel
-          isTransactionModalOpen={transcationIsOpen}
-          onTransactionModalClose={transcationOnClose}
+      {transactionIsOpen && (
+        <TransactionModel
+          isTransactionModalOpen={transactionIsOpen}
+          onTransactionModalClose={transactionOnClose}
           pfp={pfp}
           setIsLoading={setIsLoading}
           profileCreated={profileCreated}
@@ -144,7 +148,7 @@ export const Form = () => {
             display: "flex",
             flexDirection: "column",
           }}
-          onSubmit={handleSubmit(() => transcationOnOpen())}
+          onSubmit={handleSubmit(() => transactionOnOpen())}
         >
           <FormControl w="full" variant={"outline"} colorScheme={"pink"}>
             <FormLabel
@@ -161,7 +165,12 @@ export const Form = () => {
             />
           </FormControl>
           <Collapse in={isOpen} animateOpacity>
-            <FramerCarousel onClose={onClose} setPFP={setPFP} PFP={pfp} />
+            <FramerCarousel
+              setNFTProfile={setProfileNFT}
+              onClose={onClose}
+              setPFP={setPFP}
+              PFP={pfp}
+            />
           </Collapse>
           <FormControl
             variant={"outline"}

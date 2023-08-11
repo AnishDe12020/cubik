@@ -32,7 +32,7 @@ interface Props {
   signingTransaction: boolean;
   handleTx: () => void;
 }
-export const TranscationModel = ({
+export const TransactionModel = ({
   profileCreated,
   isTransactionModalOpen,
   onTransactionModalClose,

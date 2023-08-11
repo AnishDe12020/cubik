@@ -13,30 +13,40 @@ import {
 } from "@/utils/chakra";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { motion } from "framer-motion";
-import { memo, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import { BsImage } from "react-icons/bs";
 import { assestsByOwner } from "./assestsByOwner";
 // import { useUserStore } from "~/store/userStore";
 import Carousel from "./Carousel";
 import { set } from "date-fns";
+import { NFTProfile, NftResponseCarousel } from "@/types/NFTProfile";
 
 type CarouselPropsType = {
   onClose: () => void;
   setPFP: (pfp: string) => void;
   PFP: string;
+  setNFTProfile: Dispatch<SetStateAction<NFTProfile | undefined>>;
 };
-interface NftResponse {
-  id: string;
-  name: string;
-  image: string;
-}
-const FramerCarousel = ({ onClose, setPFP, PFP }: CarouselPropsType) => {
+
+const FramerCarousel = ({
+  onClose,
+  setPFP,
+  PFP,
+  setNFTProfile,
+}: CarouselPropsType) => {
   const carousel = useRef<HTMLElement>();
   const [carouselWidth, setCarouselWidth] = useState(0);
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
-  const [nftData, setNftData] = useState<NftResponse[]>([]);
+  const [nftData, setNftData] = useState<NftResponseCarousel[]>([]);
   //   const { user } = useUserStore();
   const { publicKey } = useWallet();
 
@@ -157,6 +167,7 @@ const FramerCarousel = ({ onClose, setPFP, PFP }: CarouselPropsType) => {
         >
           {nftData && nftData?.length > 0 ? (
             <Carousel
+              setNFTProfile={setNFTProfile}
               carouselWidth={carouselWidth}
               nftsData={nftData}
               PFP={PFP}

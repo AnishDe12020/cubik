@@ -1,8 +1,11 @@
 "use client";
 
+import { useUser } from "@/app/context/user";
+import { NFTProfile, NftResponseCarousel } from "@/types/NFTProfile";
 import { Box, Flex, Skeleton } from "@/utils/chakra";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { motion } from "framer-motion";
-import { Key, memo, useState } from "react";
+import { Dispatch, Key, SetStateAction, memo, useState } from "react";
 // import { useUserStore } from "~/store/userStore";
 
 const Carousel = memo(function Carousel({
@@ -10,15 +13,17 @@ const Carousel = memo(function Carousel({
   nftsData,
   PFP,
   setPFP,
+  setNFTProfile,
 }: {
   carouselWidth: number;
-  nftsData: any;
+  nftsData: NftResponseCarousel[];
   PFP: string;
+  setNFTProfile: Dispatch<SetStateAction<NFTProfile | undefined>>;
   setPFP: (pfp: string) => void;
 }) {
   //   const { user } = useUserStore();
   const [isDragging, setIsDragging] = useState(false);
-
+  const { publicKey } = useWallet();
   const handleDragStart = () => {
     setIsDragging(true);
   };
@@ -32,7 +37,7 @@ const Carousel = memo(function Carousel({
     return <div>Error: No NFT data available</div>;
   }
 
-  const NFTImg = ({ nft }: { nft: any }) => (
+  const NFTImg = ({ nft }: { nft: NftResponseCarousel }) => (
     <Box
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
@@ -46,6 +51,12 @@ const Carousel = memo(function Carousel({
       onClick={() => {
         if (!isDragging) {
           setPFP(nft.image);
+          setNFTProfile({
+            collection: nft.name,
+            name: nft.metadataName,
+            owner: publicKey?.toBase58() || "",
+            token: nft.tokenMint,
+          });
         }
       }}
       pointerEvents={isDragging ? "none" : "all"}

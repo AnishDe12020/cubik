@@ -1,4 +1,5 @@
 import { env } from "@/env.mjs";
+import { NftResponseCarousel } from "@/types/NFTProfile";
 
 interface Nft {
   id: string;
@@ -7,17 +8,13 @@ interface Nft {
     files: Array<{
       uri: string;
     }>;
+    metadata: any;
   };
 }
 
-interface NftResponse {
-  id: string;
-  name: string;
-  image: string;
-}
 export const assestsByOwner = async (
   ownerAddress: string
-): Promise<[NftResponse[] | null, boolean]> => {
+): Promise<[NftResponseCarousel[] | null, boolean]> => {
   if (!ownerAddress) {
     // Handle invalid ownerAddress
     throw new Error("Invalid owner address");
@@ -59,8 +56,9 @@ export const assestsByOwner = async (
       throw new Error("Invalid API response");
     }
 
-    const myNfts: NftResponse[] = r.result.items.map((nft: Nft) => {
+    const myNfts: NftResponseCarousel[] = r.result.items.map((nft: Nft) => {
       const files = nft.content.files;
+      const metadataName = nft.content.metadata.name;
       const image =
         files && files.length > 0 ? files[0]?.uri : "default-image-url";
 
@@ -68,6 +66,8 @@ export const assestsByOwner = async (
         id: nft.id,
         name: nft.name,
         image,
+        metadataName: metadataName,
+        tokenMint: nft.id,
       };
     });
     return [myNfts, false];

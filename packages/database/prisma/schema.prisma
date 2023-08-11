@@ -29,7 +29,8 @@ model User {
   Round          Round[]
   Contribution   Contribution[]
   Team           Team[]
-  Proof         Proof[]
+  Proof          Proof[]
+  Project        Project[]
 
   @@fulltext([username])
 }
@@ -44,8 +45,11 @@ model Proof {
   isActive  Boolean   @default(true)
   isArchive Boolean   @default(false)
   User      User      @relation(fields: [userId], references: [id])
+  Project   Project   @relation(fields: [projectId], references: [id])
+  projectId String
 
   @@index([userId])
+  @@index([projectId])
 }
 
 model Session {
@@ -84,11 +88,15 @@ model Project {
   updatedAt            DateTime               @updatedAt
   isActive             Boolean                @default(true)
   isArchive            Boolean                @default(false)
+  Owner                User                   @relation(fields: [ownerPublickey], references: [mainWallet])
   Comments             Comments[]
   ProjectJoinRound     ProjectJoinRound[]
   Contribution         Contribution[]
   Team                 Team[]
   ProjectJoinHackathon ProjectJoinHackathon[]
+  Proof                Proof[]
+
+  @@index([ownerPublickey])
 }
 
 model Round {
@@ -311,4 +319,3 @@ enum ProjectJoinRoundStatus {
   APPROVED
   REJECTED
 }
-

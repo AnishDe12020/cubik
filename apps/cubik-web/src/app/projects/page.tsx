@@ -11,28 +11,33 @@ const getProjects = async () => {
       amountRaise: "desc",
     },
     select: {
+      _count: {
+        select: {
+          Contribution: true,
+        },
+      },
       id: true,
       status: true,
       amountRaise: true,
-      fundingRound: {
+      Round: {
         select: {
           id: true,
           colorScheme: true,
-          active: true,
+          isActive: true,
           endTime: true,
-          roundName: true,
+          name: true,
           startTime: true,
         },
       },
-      project: {
+      Project: {
         select: {
           id: true,
           industry: true,
           logo: true,
           name: true,
-          project_link: true,
-          short_description: true,
-          owner: {
+          projectLink: true,
+          shortDescription: true,
+          Owner: {
             select: {
               username: true,
             },
@@ -40,13 +45,14 @@ const getProjects = async () => {
           isArchive: true,
           Contribution: {
             take: 3,
+
             orderBy: {
-              currentusdTotal: "desc",
+              totalAmount: "desc",
             },
+
             distinct: "userId",
             select: {
-              count: true,
-              user: {
+              User: {
                 select: {
                   profilePicture: true,
                 },
@@ -58,27 +64,25 @@ const getProjects = async () => {
     },
   });
 
-  return projects.map(({ id, status, amountRaise, fundingRound, project }) => {
-    console.log(project.Contribution);
-
+  return projects.map(({ id, status, amountRaise, Project, Round, _count }) => {
     return {
       id,
-      projectId: project.id,
-      owner: project.owner,
+      projectId: Project.id,
+      owner: Project.Owner,
       status,
-      name: project.name,
-      logo: project.logo,
-      description: project.short_description,
+      name: Project.name,
+      logo: Project.logo,
+      description: Project.shortDescription,
       amountRaised: amountRaise
         ? formatNumberWithK(parseInt(amountRaise.toFixed(2)))
         : "0",
-      industry: JSON.parse(project.industry) as Project["industry"],
+      industry: JSON.parse(Project.industry) as Project["industry"],
       contributors: {
-        count: project.Contribution[0]?.count || 0,
-        images: project.Contribution.filter(
-          (c) => c.user.profilePicture !== null
+        count: _count.Contribution,
+        images: Project.Contribution.filter(
+          (c) => c.User.profilePicture !== null
         ).map((c) => {
-          return c.user.profilePicture!;
+          return c.User.profilePicture!;
         }),
       },
     };
@@ -93,7 +97,6 @@ function shuffle<T>(array: T[]): T[] {
 
 export default async function () {
   const projects = await shuffle(await getProjects());
-
   return <Projects projects={projects} />;
 }
 

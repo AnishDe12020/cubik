@@ -15,6 +15,7 @@ import { formatNumberWithK } from "@/utils/helpers/formatWithK";
 import React from "react";
 import { BiChevronRight } from "react-icons/bi";
 import { timeSince } from "@/utils/helpers/timeSince";
+import { tokenList } from "@/utils/helpers/tokenlist";
 
 interface Props {
   isLoading?: boolean;
@@ -116,13 +117,12 @@ export const ContributionRow = ({
             opacity={isLoading ? 0.5 : 1}
           >
             <Center>
-              {token.includes("sol") ? (
-                <SOL size={"32px"} />
-              ) : token === "USDC" ? (
-                <USDC size={"32px"} />
-              ) : (
-                token
-              )}
+              {tokenList.find(
+                (e) => e.name.includes("Solana") && e.address === token
+              ) && <SOL size={"32px"} />}
+              {tokenList.find(
+                (e) => e.name.includes("USDC") && e.address === token
+              ) && <USDC size={"32px"} />}
             </Center>
           </Skeleton>
           <VStack justify={"center"} spacing="2px" align={"start"}>
@@ -137,7 +137,7 @@ export const ContributionRow = ({
                 </Box>
               </Skeleton>
               <Box as="p" textStyle={{ base: "title8", md: "title7" }}>
-                {token.toUpperCase()}
+                {tokenList.find((e) => e.address === token)?.name.toUpperCase()}
               </Box>
             </HStack>
             <Skeleton

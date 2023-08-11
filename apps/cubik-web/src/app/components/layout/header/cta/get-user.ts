@@ -3,7 +3,7 @@ import { prisma } from "@cubik/database";
 import { redirect } from "next/navigation";
 
 export const getOrCreateUser = async (publicKey: string) => {
-  const user = await prisma.userModel.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       mainWallet: publicKey,
     },
@@ -16,7 +16,7 @@ export const getOrCreateUser = async (publicKey: string) => {
   if (!user?.username) return null;
   else if (user) return user;
   else {
-    await prisma.userModel.create({
+    await prisma.user.create({
       data: {
         mainWallet: publicKey,
       },

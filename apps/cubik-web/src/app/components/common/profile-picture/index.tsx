@@ -12,6 +12,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Portal, Skeleton, Tag } from "@chakra-ui/react";
 import { TbCurrencySolana } from "react-icons/tb";
+import { NFTProfile } from "@/types/NFTProfile";
+import { TruncatedAddr } from "../wallet";
 const MotionBox = motion(Box);
 
 type profilePictureProps = {
@@ -21,6 +23,7 @@ type profilePictureProps = {
   width: { base: string; sm: string; md: string; lg: string; xl: string };
   height: { base: string; sm: string; md: string; lg: string; xl: string };
   rounded?: string;
+  NFTProfile: NFTProfile;
 };
 
 const ProfilePictureAvatar = (props: profilePictureProps) => {
@@ -45,7 +48,6 @@ const ProfilePictureAvatar = (props: profilePictureProps) => {
   const handleMouseLeave = () => {
     onClose();
   };
-  const isLoading = true;
 
   return (
     <Center
@@ -159,7 +161,7 @@ const ProfilePictureAvatar = (props: profilePictureProps) => {
                         </Box>
                       </HStack> */}
                       <Skeleton
-                        isLoaded={!isLoading}
+                        isLoaded={true}
                         opacity={0.3}
                         fadeDuration={0.2}
                       >
@@ -169,7 +171,7 @@ const ProfilePictureAvatar = (props: profilePictureProps) => {
                           noOfLines={1}
                           textStyle={"title3"}
                         >
-                          Solana Monke Business #3294
+                          {props.NFTProfile?.name || "NFT Name"}
                         </Box>
                       </Skeleton>
                     </VStack>
@@ -180,12 +182,12 @@ const ProfilePictureAvatar = (props: profilePictureProps) => {
                         Collection
                       </Box>
                       <Skeleton
-                        isLoaded={!isLoading}
+                        isLoaded={true}
                         opacity={0.5}
                         fadeDuration={0.2}
                       >
                         <Box as="p" color="neutral.10" textStyle={"title4"}>
-                          SMB
+                          {props.NFTProfile?.collection || "Collection Name"}
                         </Box>
                       </Skeleton>
                     </HStack>
@@ -194,12 +196,14 @@ const ProfilePictureAvatar = (props: profilePictureProps) => {
                         Owner
                       </Box>
                       <Skeleton
-                        isLoaded={!isLoading}
+                        isLoaded={true}
                         opacity={0.5}
                         fadeDuration={0.2}
                       >
                         <Box as="p" color="neutral.10" textStyle={"title4"}>
-                          f93..kf8
+                          {TruncatedAddr({
+                            walletAddress: props.NFTProfile?.owner || "",
+                          })}
                         </Box>
                       </Skeleton>
                     </HStack>
@@ -215,7 +219,6 @@ const ProfilePictureAvatar = (props: profilePictureProps) => {
                       borderColor="neutral.5"
                       bg="neutral.3"
                       variant="unstyled"
-                      isDisabled={isLoading}
                       _hover={{
                         bg: "neutral.4",
                       }}

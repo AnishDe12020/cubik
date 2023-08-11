@@ -20,7 +20,7 @@ import { GrantCard } from "./components/grantCard";
 export const getGrants = async () => {
   const pastRound = prisma.round.findMany({
     where: {
-      active: true,
+      isActive: true,
       endTime: {
         lt: new Date(),
       },
@@ -31,17 +31,17 @@ export const getGrants = async () => {
       startTime: true,
       matchedPool: true,
       colorScheme: true,
-      short_description: true,
-      roundName: true,
+      shortDescription: true,
+      name: true,
     },
   });
 
   const futureRound = prisma.round.findMany({
     where: {
-      active: true,
       endTime: {
         gte: new Date(),
       },
+      isActive: true,
     },
     select: {
       id: true,
@@ -49,8 +49,8 @@ export const getGrants = async () => {
       startTime: true,
       matchedPool: true,
       colorScheme: true,
-      short_description: true,
-      roundName: true,
+      shortDescription: true,
+      name: true,
     },
   });
 
@@ -197,8 +197,8 @@ const GrantsPage = async () => {
                         id={grant.id}
                         startTime={grant.startTime}
                         matchedPool={grant.matchedPool}
-                        roundName={grant.roundName}
-                        short_description={grant.short_description}
+                        roundName={grant.name}
+                        short_description={grant.shortDescription}
                         key={grant.id}
                       />
                     );
@@ -231,8 +231,8 @@ const GrantsPage = async () => {
                         id={grant.id}
                         startTime={grant.startTime}
                         matchedPool={grant.matchedPool}
-                        roundName={grant.roundName}
-                        short_description={grant.short_description}
+                        roundName={grant.name}
+                        short_description={grant.shortDescription}
                         key={grant.id}
                       />
                     );

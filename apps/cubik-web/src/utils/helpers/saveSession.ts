@@ -16,7 +16,7 @@ export const saveSession = async (
     data: {
       ipAddress: ip,
       userAgent,
-      user: {
+      User: {
         connect: {
           mainWallet,
         },

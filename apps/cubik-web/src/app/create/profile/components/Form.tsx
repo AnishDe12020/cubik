@@ -97,7 +97,7 @@ export const Form = () => {
       setIsLoading(true);
       const txId = await handleTx();
       if (!txId) return;
-      const res = await prisma.userModel.update({
+      const res = await prisma.user.update({
         where: {
           mainWallet: publicKey?.toBase58(),
         },

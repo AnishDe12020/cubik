@@ -17,15 +17,17 @@ import { notFound } from "next/navigation";
 import ProfilePictureAvatar from "@/app/components/common/profile-picture";
 import Username from "../components/common/username";
 import User from "./components/user";
+import { NFTProfile } from "@/types/NFTProfile";
 
 const getProfile = async (username: string) => {
-  return await prisma.userModel.findUnique({
+  return await prisma.user.findUnique({
     where: {
       username: username,
     },
     select: {
       profilePicture: true,
       mainWallet: true,
+      profileNft: true,
     },
   });
 };
@@ -54,10 +56,12 @@ const Profile = async ({
     >
       <Flex flexDir={"column"} gap="48px">
         <User
+          NFTProfile={profile.profileNft as NFTProfile}
           username={username}
           mainWallet={profile.mainWallet}
           profilePicture={profile.profilePicture!}
         />
+
         <Tabs variant={"cubik"} isLazy>
           <TabList>
             <Tab>Details</Tab>

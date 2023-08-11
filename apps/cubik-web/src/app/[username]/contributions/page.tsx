@@ -6,7 +6,7 @@ import { prisma } from "@cubik/database";
 const getContribution = async (username: string) => {
   return await prisma.contribution.findMany({
     where: {
-      user: {
+      User: {
         username: username,
       },
     },
@@ -14,17 +14,17 @@ const getContribution = async (username: string) => {
       createdAt: "desc",
     },
     select: {
-      usdTotal: true,
-      total: true,
+      totalAmount: true,
+      totalUsdAmount: true,
       createdAt: true,
       token: true,
       id: true,
-      ProjectsModel: {
+      Project: {
         select: {
           name: true,
           industry: true,
           logo: true,
-          owner: {
+          Owner: {
             select: {
               username: true,
             },
@@ -33,7 +33,7 @@ const getContribution = async (username: string) => {
       },
       Round: {
         select: {
-          roundName: true,
+          name: true,
         },
       },
     },
@@ -55,17 +55,17 @@ const ContributionPage = async ({
               key={contribution.id}
               amountRaised={0}
               token={contribution.token}
-              tokenAmount={contribution.total}
-              usdAmount={contribution.usdTotal}
+              tokenAmount={contribution.totalAmount}
+              usdAmount={contribution.totalUsdAmount}
               isLoading={false}
               createdAt={contribution.createdAt.toString()}
               eventName={
-                contribution.Round?.roundName || "hackathon name" // update schema and
+                contribution.Round?.name || "hackathon name" // update schema and
               }
-              projectIndustry={contribution.ProjectsModel.industry}
-              projectLogo={contribution.ProjectsModel.logo}
-              projectName={contribution.ProjectsModel.name}
-              projectOwner={contribution.ProjectsModel.owner.username as string}
+              projectIndustry={contribution.Project.industry}
+              projectLogo={contribution.Project.logo}
+              projectName={contribution.Project.name}
+              projectOwner={contribution.Project.Owner.username as string}
             />
           );
         })}

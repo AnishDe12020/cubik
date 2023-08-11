@@ -2,15 +2,18 @@ import { Center, Flex, HStack, SkeletonCircle, VStack } from "@/utils/chakra";
 import ProfilePictureAvatar from "@/app/components/common/profile-picture";
 import Username from "@/app/components/common/username";
 import { WalletAddress } from "@/app/components/common/wallet";
+import { NFTProfile } from "@/types/NFTProfile";
 
 const User = ({
   username,
   profilePicture,
   mainWallet,
+  NFTProfile,
 }: {
   username: string;
   profilePicture: string;
   mainWallet: string;
+  NFTProfile: NFTProfile;
 }) => {
   return (
     <div>
@@ -25,7 +28,8 @@ const User = ({
           height={{ base: "56px", sm: "72px", md: "84px" }}
         >
           <ProfilePictureAvatar
-            asNFT={false}
+            NFTProfile={NFTProfile}
+            asNFT={NFTProfile?.name ? true : false}
             profilePicture={profilePicture}
             username={username}
             width={{

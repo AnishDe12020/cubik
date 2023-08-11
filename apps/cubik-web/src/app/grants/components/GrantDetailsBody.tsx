@@ -21,7 +21,7 @@ import {
   VStack,
 } from "@/utils/chakra";
 import React from "react";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@cubik/database";
 import { ErrorUI } from "@/app/components/common/errors/errorUI";
 import { DetailedDescription } from "@/app/components/common/description";
 

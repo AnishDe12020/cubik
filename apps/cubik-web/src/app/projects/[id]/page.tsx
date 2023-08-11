@@ -2,6 +2,7 @@ import { Container, Stack } from "@/utils/chakra";
 import { prisma } from "@cubik/database";
 import { Details } from "./components/details";
 import { notFound } from "next/navigation";
+import { Interactions } from "./components/interactions";
 
 const getProject = async (id: string) => {
   return await prisma.project.findUnique({
@@ -9,9 +10,17 @@ const getProject = async (id: string) => {
       id: id,
     },
     include: {
-      Contribution: true,
+      Contribution: {
+        include: {
+          User: true,
+        },
+      },
       Owner: true,
-      Team: true,
+      Team: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 };
@@ -41,7 +50,9 @@ const Project = async ({ params: { id } }: { params: { id: string } }) => {
         >
           <Details
             name=""
-            projectDetails={project!}
+            projectDetails={{
+              ...project,
+            }}
             roundId={"1"}
             joinId={""}
             isLoading={false}
@@ -49,13 +60,13 @@ const Project = async ({ params: { id } }: { params: { id: string } }) => {
             contributions={0}
             communityContributions={0}
           />
-          {/*
-          <ProjectInteractions
-            projectDetails={data as ProjectsModel}
-            isLoading={isLoading}
+
+          <Interactions
+            projectDetails={project}
+            isLoading={false}
             preview={true}
-            team={data?.Team ?? []}
-          /> */}
+            team={project?.Team}
+          />
         </Stack>
       </Container>
     </main>

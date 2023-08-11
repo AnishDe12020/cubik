@@ -216,7 +216,7 @@ export const Details = ({
       user: User;
     })[];
     Contribution: (Contribution & {
-      user: User;
+      User: User;
     })[];
     Owner: User;
   };

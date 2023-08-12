@@ -21,13 +21,13 @@ import { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight, BiChevronUp } from "react-icons/bi";
 // import ContributionsEmptyState from "~/components/common/empty-state/ContributionsEmptyState";
 // import Pagination from "~/components/common/pagination/Pagination";
-// import { SOL, USDC } from "~/components/common/tokens/token";
-// import Username from "~/components/common/username/Username";
+import { SOL, USDC } from "@/app/components/common/tokens";
+import Username from "@/app/components/common/username";
 // import { TruncatedAddr } from "~/components/common/wallet/WalletAdd";
 import { Contribution, Proof, User } from "@cubik/database";
 import { formatNumberWithK } from "@/utils/helpers/formatWithK";
 import React from "react";
-// import { timeSince } from "~/utils/gettimeSince";
+import { timeSince } from "@/utils/helpers/timeSince";
 import { getContributors } from "./get-contributors";
 
 type Props = {
@@ -78,6 +78,8 @@ export const TableLoading = () => {
 };
 
 export const ContributorRow: React.FC<Props> = (props) => {
+  console.log(props.token);
+
   return (
     <Tr
       w={"full"}
@@ -99,12 +101,12 @@ export const ContributorRow: React.FC<Props> = (props) => {
             justify="center"
             spacing={{ base: "8px", md: "8px" }}
           >
-            {/* <Username
+            <Username
               isLoading={false}
               username={props?.username}
-              proofs={(props?.proof as unknown as UserProof[]) ?? []}
+              // proofs={(props?.proof as unknown as UserProof[]) ?? []}
               size="sm"
-            /> */}
+            />
             <Box
               as="p"
               textStyle={{ base: "body6", md: "body5" }}
@@ -120,11 +122,11 @@ export const ContributorRow: React.FC<Props> = (props) => {
       <Td p="18px">
         <HStack gap="8px" align={"center"}>
           <Center>
-            {/* {props.token.includes("sol") ? (
+            {props.token.includes("So1") ? (
               <SOL size={"28px"} />
             ) : (
               <USDC size={"28px"} />
-            )} */}
+            )}
           </Center>
           <VStack justify={"center"} spacing="2px" align={"start"}>
             <HStack align={"baseline"} color="white">
@@ -132,7 +134,8 @@ export const ContributorRow: React.FC<Props> = (props) => {
                 {formatNumberWithK(props.amount)}
               </Box>
               <Box as="p" textStyle={{ base: "title6", md: "title7" }}>
-                {props.token.toUpperCase()}
+                {/*  token address is being returned instead of name */}
+                {/* {props.token.toUpperCase()} */}
               </Box>
             </HStack>
 
@@ -152,7 +155,7 @@ export const ContributorRow: React.FC<Props> = (props) => {
           textStyle={{ base: "body5", md: "body4" }}
           color="neutral.11"
         >
-          {/* {timeSince(new Date(props.timestamp))} */}
+          {timeSince(new Date(props.timestamp))}
         </Box>
       </Td>
       <Td p="18px">

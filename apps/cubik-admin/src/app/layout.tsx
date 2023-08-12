@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 // include styles from the ui package
-import "@cubik/ui/styles.css";
+import "@cubik/ui/src/styles.css";
 
 export default function RootLayout({
   children,

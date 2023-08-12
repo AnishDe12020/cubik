@@ -1,3 +1,4 @@
+"use client";
 import {
   Avatar,
   Box,
@@ -16,17 +17,18 @@ import {
   Tr,
   VStack,
 } from "@/utils/chakra";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronRight, BiChevronUp } from "react-icons/bi";
 // import ContributionsEmptyState from "~/components/common/empty-state/ContributionsEmptyState";
 // import Pagination from "~/components/common/pagination/Pagination";
 // import { SOL, USDC } from "~/components/common/tokens/token";
 // import Username from "~/components/common/username/Username";
 // import { TruncatedAddr } from "~/components/common/wallet/WalletAdd";
-import { Contribution, Proof } from "@cubik/database";
+import { Contribution, Proof, User } from "@cubik/database";
 import { formatNumberWithK } from "@/utils/helpers/formatWithK";
+import React from "react";
 // import { timeSince } from "~/utils/gettimeSince";
+import { getContributors } from "./get-contributors";
 
 type Props = {
   id: string;
@@ -76,12 +78,11 @@ export const TableLoading = () => {
 };
 
 export const ContributorRow: React.FC<Props> = (props) => {
-  const router = useRouter();
   return (
     <Tr
       w={"full"}
       onClick={() => {
-        router.push(`/${props?.username}`);
+        window.location.href = `/${props?.username}`;
       }}
       cursor="pointer"
       _hover={{ backgroundColor: "#0C0D0D" }}
@@ -161,32 +162,37 @@ export const ContributorRow: React.FC<Props> = (props) => {
   );
 };
 
-const Contributors = ({
-  projectId,
-  roundId,
-  isLoading,
-  isHackathon,
-  contributors,
-}: {
-  projectId: string;
-  isLoading?: boolean;
-  roundId: string;
-  isHackathon: boolean;
-  contributors: Contribution[];
-}) => {
+const Contributors = ({ projectId }: { projectId: string }) => {
+  const [contributors, setContributors] = useState<
+    {
+      id: string;
+      totalAmount: number;
+      token: string;
+      createdAt: Date;
+      totalUsdAmount: number;
+      User: {
+        id: string;
+        profilePicture: string | null;
+        username: string | null;
+        mainWallet: string;
+        Proof: Proof[];
+      };
+    }[]
+  >();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("timestamp");
   const [sortDirection, setSortDirection] = useState("desc");
 
-  //   const {
-  //     data: contributorsData,
-  //     isLoading: loadingContributors,
-  //     isError,
-  //     error,
-  //   } = trpc.contribution.getProjectContributors.useQuery({
-  //     projectId,
-  //     hackthonId: roundId,
-  //   });
+  useEffect(() => {
+    if (!contributors) {
+      (async () => {
+        const _contributors = await getContributors(projectId);
+        setContributors(_contributors);
+      })();
+    }
+  }, [contributors]);
+
+  console.log("contributors", contributors);
 
   const pageSize = 15;
   const siblingCount = 1;
@@ -309,7 +315,7 @@ const Contributors = ({
                 <Th w={"10%"} p="18px"></Th>
               </Tr>
             </Thead>
-            {isLoading || loadingContributors ? (
+            {!contributors ? (
               <TableLoading />
             ) : (
               <Tbody>
@@ -319,15 +325,15 @@ const Contributors = ({
                   currentContributors.map((contributor) => (
                     <ContributorRow
                       key={contributor.id}
-                      amount={contributor.total}
+                      amount={contributor.totalAmount}
                       token={contributor.token}
                       timestamp={contributor.createdAt}
-                      avatar={contributor.user.profilePicture}
-                      usd={contributor.usdTotal}
-                      username={contributor.user.username}
-                      walletAddress={contributor.user.mainWallet}
-                      id={contributor.user.id}
-                      proof={contributor.user.proof as unknown as UserProof[]}
+                      avatar={contributor.User.profilePicture!}
+                      usd={contributor.totalUsdAmount}
+                      username={contributor.User.username!}
+                      walletAddress={contributor.User.mainWallet}
+                      id={contributor.User.id}
+                      proof={contributor.User.Proof}
                     />
                   ))
                 )}

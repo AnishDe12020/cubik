@@ -10,11 +10,6 @@ const getProject = async (id: string) => {
       id: id,
     },
     include: {
-      Contribution: {
-        include: {
-          User: true,
-        },
-      },
       Owner: true,
       Team: {
         include: {

@@ -18,8 +18,9 @@ import { formateDateInMonths } from "@/utils/helpers/formatDates";
 import { Button, Center } from "@chakra-ui/react";
 import { BiChevronDown } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { Description } from "./description";
+import { Description } from "../description";
 import Contributors from "./contributors";
+import { Wrapper } from "@/app/components/common/wrapper";
 
 export const Tabs = ({
   projectDetails,
@@ -33,10 +34,7 @@ export const Tabs = ({
         Team: (Team & {
           user: User;
         })[];
-        Contribution: (Contribution & {
-          user: User;
-        })[];
-        owner: User;
+        Owner: User;
       })
     | undefined;
   ownerName: string;
@@ -83,13 +81,7 @@ export const Tabs = ({
           </VStack>
         </TabPanel>
         <TabPanel overflowX="scroll">
-          {/* <Contributors
-            isHackathon={true}
-            roundId={roundId}
-            projectId={projectDetails?.id as string}
-            isLoading={isLoading}
-            contributors={projectDetails!.Contribution}
-          /> */}
+          <Contributors projectId={projectDetails?.id!} />
         </TabPanel>
         {/* <TabPanel>
           {isLoading ? (

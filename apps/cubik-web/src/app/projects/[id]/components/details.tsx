@@ -215,9 +215,6 @@ export const Details = ({
     Team: (Team & {
       user: User;
     })[];
-    Contribution: (Contribution & {
-      User: User;
-    })[];
     Owner: User;
   };
 }) => {

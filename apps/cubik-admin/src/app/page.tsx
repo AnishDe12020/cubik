@@ -1,95 +1,48 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import { Metadata } from "next";
+import { Button, Card } from "@cubik/ui";
+
+const CARD_CONTENT = [
+  {
+    title: "Caching Tasks",
+    href: "https://turbo.build/repo/docs/core-concepts/caching",
+    cta: "Read More",
+  },
+  {
+    title: "Running Tasks",
+    href: "https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks",
+    cta: "Read More",
+  },
+  {
+    title: "Configuration Options",
+    href: "https://turbo.build/repo/docs/reference/configuration",
+    cta: "Read More",
+  },
+];
+
+export const metadata: Metadata = {
+  title: "Web - Turborepo Example",
+};
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+      <main className="mx-auto w-auto px-4 pt-16 pb-8 sm:pt-24 lg:px-8">
+        <h1 className="mx-auto text-center text-6xl font-extrabold tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-8xl">
+          Web
+          <span className="block bg-gradient-to-r from-brandred to-brandblue bg-clip-text text-transparent px-2">
+            Turborepo Example
+          </span>
+        </h1>
+        <div className="mx-auto mt-5 max-w-xl sm:flex sm:justify-center md:mt-8">
+          <Button />
         </div>
-      </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 place-content-evenly">
+          {CARD_CONTENT.map((card) => (
+            <Card key={card.title} {...card} />
+          ))}
+        </div>
+      </main>
+    </div>
+  );
 }

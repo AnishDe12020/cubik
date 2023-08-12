@@ -18,6 +18,7 @@ import { StepOne } from "./components/StepOne";
 import { StepTwo } from "./components/StepTwo";
 import { StepThree } from "./components/StepThree";
 import axios from "axios";
+import { CreateProjectTransactionModal } from "./components/CreateProjectTransactionModal";
 
 type SubmitProjectProps = {
   onSubmit: (_project: Project) => void;
@@ -244,6 +245,13 @@ const CreateProjectPage = () => {
             {step === 4 && <>done...</>}
           </form>
         </Card>
+        <CreateProjectTransactionModal
+          getValues={getValues}
+          isTransactionModalOpen={isTransactionModalOpen}
+          onTransactionModalClose={onTransactionModalClose}
+          imageUrl={imageUrl as string}
+          editorData={editorData as string}
+        />
       </Container>
     </>
   );

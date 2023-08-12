@@ -19,7 +19,8 @@
     "react-dom": "18.2.0",
     "typescript": "5.1.6",
     "@cubik/tsconfig": "workspace:*",
-    "@cubik/ui": "workspace:*"
+    "@cubik/ui": "workspace:*",
+    "tailwind-config":"workspace:*"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

@@ -132,6 +132,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      tailwind-config:
+        specifier: workspace:*
+        version: link:../../packages/tailwind-config
       typescript:
         specifier: 5.1.6
         version: 5.1.6

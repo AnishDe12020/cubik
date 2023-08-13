@@ -2,7 +2,7 @@ import { Center, Container, VStack } from "@/utils/chakra";
 import Image from "next/image";
 import React from "react";
 import { HackathonHeader } from "../components/HackathonHeader";
-
+import { prisma } from "@cubik/database";
 interface Props {
   params: { slug: string };
 }

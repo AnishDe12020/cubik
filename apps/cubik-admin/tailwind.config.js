@@ -1,5 +1,1 @@
-import sharedConfig from "tailwind-config";
-module.exports = {
-  content: [`src/**/*.{js,ts,jsx,tsx}`],
-  presets: [sharedConfig],
-};
+module.exports = require("@cubik/ui/tailwind.config");

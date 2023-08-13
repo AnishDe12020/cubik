@@ -1,6 +1,4 @@
-import "../styles/globals.css";
-// include styles from the ui package
-import "@cubik/ui/src/styles.css";
+import "@cubik/ui/styles/globals.css";
 
 export default function RootLayout({
   children,
@@ -8,7 +6,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="bg-zinc-900">
+    <html
+      style={{
+        border: "1px solid red",
+      }}
+      lang="en"
+      className="bg-zinc-900"
+    >
       <body>{children}</body>
     </html>
   );

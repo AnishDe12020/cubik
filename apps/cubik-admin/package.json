@@ -20,8 +20,7 @@
     "typescript": "5.1.6",
     "@cubik/tsconfig": "workspace:*",
     "@cubik/ui": "workspace:*",
-    "tailwindcss": "^3.2.4",
-    "tailwind-config": "workspace:*"
+    "tailwindcss": "^3.2.4"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

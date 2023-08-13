@@ -117,12 +117,12 @@ export default function RootLayout({
                       mixBlendMode={"hue"}
                       bg="#071A0F"
                     />
-                    <Image
+                    {/* <Image
                       src="https://res.cloudinary.com/demonicirfan/image/upload/v1689923669/Mask_group_4_xmxqdg.png"
                       alt="Twitter Logo"
                       width={"300"}
                       height={"300"}
-                    />
+                    /> */}
                   </Center>
                 </HStack>
               </Stack>

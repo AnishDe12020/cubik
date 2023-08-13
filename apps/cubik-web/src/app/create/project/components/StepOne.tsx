@@ -16,7 +16,7 @@ import {
 } from "@/utils/chakra";
 import { GroupBase, OptionsOrGroups, Select } from "chakra-react-select";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import {
   Control,
@@ -34,8 +34,9 @@ import { FiChevronRight } from "react-icons/fi";
 import { VscCloudUpload } from "react-icons/vsc";
 import { category } from "./categories";
 import { FormData } from "../page";
-import { useUploadThing, uploadFiles } from "@/utils/helpers/uploadthing";
-import { generateClientDropzoneAccept } from "uploadthing/client";
+import { useUploadThing } from "@/utils/helpers/uploadthing";
+import { searchTeam } from "./search";
+import { useQuery } from "@tanstack/react-query";
 
 type StepOneProps = {
   onSubmit: (data: any) => void;
@@ -66,13 +67,17 @@ const StepOne: React.FC<StepOneProps> = ({
   const [currentTeammateName, setCurrentTeammateName] = useState<
     string | undefined
   >(undefined);
+
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
-  //   const {
-  //     data: teamSearch,
-  //     isLoading: teamSearchLoading,
-  //     error: teamSearchError,
-  //   } = useTeamSearch(currentTeammateName);
+  const {
+    data: teamSearch,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: ({ queryKey }) => searchTeam(queryKey[1] as string),
+    queryKey: ["searchTeam", currentTeammateName],
+  });
 
   const [files, setFiles] = useState<File[]>([]);
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
@@ -89,31 +94,21 @@ const StepOne: React.FC<StepOneProps> = ({
   const { startUpload } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
       if (res) {
+        console.log(res, "success");
         setValue("logo", res[0]?.url as string);
-        console.log(res[0]?.url as string, "success");
-
-        setUploadLoading(false);
       } else {
         setError("logo", {
           message: "uploading error. Please try again",
         });
-        setUploadLoading(false);
       }
+      setUploadLoading(false);
     },
+
     onUploadError: () => {
       setUploadLoading(false);
       alert("error occurred while uploading");
     },
   });
-
-  const teamWithNames: any[] = [];
-  // teamSearch?.map((item) => {
-  //   return {
-  //     value: item.id,
-  //     label: item.username,
-  //     icon: item.profilePicture,
-  //   };
-  // }) || [];
 
   const colors = [
     "red",
@@ -432,7 +427,7 @@ const StepOne: React.FC<StepOneProps> = ({
             </FormControl>
           )}
         /> */}
-        {/* <Controller
+        <Controller
           control={control}
           name="team"
           render={({
@@ -445,7 +440,7 @@ const StepOne: React.FC<StepOneProps> = ({
                 pb="0.5rem"
                 htmlFor="team"
               >
-                Add Team
+                Add Team {watch("logo")}
               </FormLabel>
               <Select
                 isMulti
@@ -455,7 +450,7 @@ const StepOne: React.FC<StepOneProps> = ({
                 onBlur={onBlur}
                 value={value as any}
                 options={
-                  teamWithNames as unknown as OptionsOrGroups<
+                  teamSearch as unknown as OptionsOrGroups<
                     string,
                     GroupBase<string>
                   >
@@ -484,6 +479,8 @@ const StepOne: React.FC<StepOneProps> = ({
                 menuIsOpen={
                   !!currentTeammateName && currentTeammateName.length > 0
                 }
+                isLoading={isLoading}
+                loadingMessage={() => "Searching..."}
                 placeholder="Search @username"
                 closeMenuOnSelect={true}
                 selectedOptionStyle="check"
@@ -616,7 +613,7 @@ const StepOne: React.FC<StepOneProps> = ({
               </FormErrorMessage>
             </FormControl>
           )}
-        /> */}
+        />
         <FormControl isRequired isInvalid={Boolean(errors.logo)} id="logo">
           <FormLabel
             fontSize={{ base: "12px", md: "14px" }}
@@ -688,7 +685,9 @@ const StepOne: React.FC<StepOneProps> = ({
                       isLoading={uploadLoading}
                       onClick={() => {
                         setUploadLoading(true);
-                        startUpload(files);
+                        if (files.length > 0) {
+                         startUpload(files);
+                        }
                       }}
                       fontSize={{ base: "xs", md: "md" }}
                     >

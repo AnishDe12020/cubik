@@ -7,6 +7,7 @@ module.exports = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "../../packages/ui/components/**/*.{ts,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {
@@ -18,6 +19,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        black: "#000",
         teal: {
           50: "#A8F0E6",
           100: "#81E6D9",

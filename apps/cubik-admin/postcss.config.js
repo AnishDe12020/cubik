@@ -1,1 +1,6 @@
-module.exports = require("@cubik/ui/postcss.config");
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};

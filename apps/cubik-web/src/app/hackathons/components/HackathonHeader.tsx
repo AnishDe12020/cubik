@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { HackathonStatus } from "./HackathonStatus";
 import { prisma } from "@cubik/database";
+import Image from "next/image";
 interface Props {
   slug: string;
 }
@@ -39,12 +40,16 @@ export const HackathonHeader = async ({ slug }: Props) => {
   return (
     <>
       <VStack w="full" gap="24px" align={"start"}>
-        <Avatar
-          borderRadius="12px"
-          backgroundColor={"#1C1C1C"}
+        <Image
+          alt="hackathon logo"
+          loading="lazy"
+          style={{
+            borderRadius: "12px",
+            backgroundColor: "#1C1C1C",
+          }}
+          width={100}
+          height={100}
           src={hackathon?.logo as string}
-          width={{ base: "5.5rem", md: "7rem" }}
-          height={{ base: "5.5rem", md: "7rem" }}
         />
         <Stack
           gap={{ base: "16px", md: "24px", lg: "12vw" }}

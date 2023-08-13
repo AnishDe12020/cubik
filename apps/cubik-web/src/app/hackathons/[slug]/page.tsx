@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { HackathonHeader } from "../components/HackathonHeader";
 import { prisma } from "@cubik/database";
+import { HackathonBody } from "../components/HackathonBody";
 interface Props {
   params: { slug: string };
 }
@@ -57,6 +58,7 @@ const HackathonPage = async ({ params: { slug } }: Props) => {
             px={{ base: "2rem", md: "3rem", xl: "1rem" }}
           >
             <HackathonHeader slug={slug} />
+            <HackathonBody slug={slug} />
           </Container>
         </VStack>
       </Container>

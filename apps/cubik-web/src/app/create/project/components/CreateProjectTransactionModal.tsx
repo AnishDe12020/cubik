@@ -1,6 +1,7 @@
+"use client";
 import React, { useState } from "react";
 import { UseFormGetValues } from "react-hook-form";
-import { FormData } from "../page";
+import { FormData } from "./Form";
 import {
   Alert,
   AlertDescription,
@@ -44,7 +45,8 @@ export const CreateProjectTransactionModal = (props: Props) => {
     <>
       <Modal
         variant={"cubik"}
-        isOpen={true || props.isTransactionModalOpen}
+        // isOpen={props.isTransactionModalOpen}
+        isOpen={true}
         onClose={props.onTransactionModalClose}
       >
         <ModalOverlay />

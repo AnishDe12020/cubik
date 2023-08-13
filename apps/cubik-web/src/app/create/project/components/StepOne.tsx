@@ -16,7 +16,7 @@ import {
 } from "@/utils/chakra";
 import { GroupBase, OptionsOrGroups, Select } from "chakra-react-select";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import {
   Control,
@@ -33,8 +33,7 @@ import {
 import { FiChevronRight } from "react-icons/fi";
 import { VscCloudUpload } from "react-icons/vsc";
 import { category } from "./categories";
-import { FormData } from "../page";
-import { useUploadThing } from "@/utils/helpers/uploadthing";
+import { FormData } from "./Form";
 import { searchTeam } from "./search";
 import { useQuery } from "@tanstack/react-query";
 
@@ -68,8 +67,6 @@ const StepOne: React.FC<StepOneProps> = ({
     string | undefined
   >(undefined);
 
-  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
-
   const {
     data: teamSearch,
     isLoading,
@@ -77,11 +74,12 @@ const StepOne: React.FC<StepOneProps> = ({
   } = useQuery({
     queryFn: ({ queryKey }) => searchTeam(queryKey[1] as string),
     queryKey: ["searchTeam", currentTeammateName],
+    retry: false,
+    enabled: currentTeammateName?.length! > 3 ? true : false,
   });
 
-  const [files, setFiles] = useState<File[]>([]);
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
-    setFiles(acceptedFiles);
+    setValue("logo", acceptedFiles);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -89,25 +87,6 @@ const StepOne: React.FC<StepOneProps> = ({
     accept: "image/*",
     multiple: false, // prevent multiple file selection
     onDrop,
-  });
-
-  const { startUpload } = useUploadThing("imageUploader", {
-    onClientUploadComplete: (res) => {
-      if (res) {
-        console.log(res, "success");
-        setValue("logo", res[0]?.url as string);
-      } else {
-        setError("logo", {
-          message: "uploading error. Please try again",
-        });
-      }
-      setUploadLoading(false);
-    },
-
-    onUploadError: () => {
-      setUploadLoading(false);
-      alert("error occurred while uploading");
-    },
   });
 
   const colors = [
@@ -252,7 +231,7 @@ const StepOne: React.FC<StepOneProps> = ({
             </FormHelperText>
           )}
         </FormControl>
-        {/* <Controller
+        <Controller
           control={control}
           name="category"
           rules={{ required: "Please enter at least 1 Tag." }}
@@ -339,6 +318,7 @@ const StepOne: React.FC<StepOneProps> = ({
                   inputContainer: (provided, state) => ({
                     ...provided,
                     ps: "8px",
+                    height: "2rem",
                     fontSize: { base: "12px", md: "14px" },
                     backgroundColor: "transparent",
                     //  border: 'none',
@@ -426,7 +406,7 @@ const StepOne: React.FC<StepOneProps> = ({
               </FormErrorMessage>
             </FormControl>
           )}
-        /> */}
+        />
         <Controller
           control={control}
           name="team"
@@ -440,7 +420,7 @@ const StepOne: React.FC<StepOneProps> = ({
                 pb="0.5rem"
                 htmlFor="team"
               >
-                Add Team {watch("logo")}
+                Add Team
               </FormLabel>
               <Select
                 isMulti
@@ -479,7 +459,7 @@ const StepOne: React.FC<StepOneProps> = ({
                 menuIsOpen={
                   !!currentTeammateName && currentTeammateName.length > 0
                 }
-                isLoading={isLoading}
+                isLoading={isLoading && currentTeammateName?.length! > 2}
                 loadingMessage={() => "Searching..."}
                 placeholder="Search @username"
                 closeMenuOnSelect={true}
@@ -493,7 +473,10 @@ const StepOne: React.FC<StepOneProps> = ({
                   container: (provided, state) => ({
                     ...provided,
                     border: "none",
-                    background: "surface.input_field",
+                    background:
+                      currentTeammateName?.length! > 3
+                        ? "surface.input_field"
+                        : "transparent",
                     outline: "0px !important",
                     borderRadius: "8px",
                     height: "40px",
@@ -524,6 +507,7 @@ const StepOne: React.FC<StepOneProps> = ({
                   inputContainer: (provided, state) => ({
                     ...provided,
                     ps: "8px",
+                    height: "2rem",
                     fontSize: { base: "12px", md: "14px" },
                     backgroundColor: "transparent",
                     border: "none",
@@ -660,7 +644,11 @@ const StepOne: React.FC<StepOneProps> = ({
                       overflow="hidden"
                     >
                       <Image
-                        src={watch("logo")}
+                        src={
+                          getValues("logo") &&
+                          // @ts-ignore
+                          URL.createObjectURL(watch("logo")[0])
+                        }
                         alt="project logo"
                         fill={true}
                         style={{ objectFit: "cover" }}
@@ -678,22 +666,12 @@ const StepOne: React.FC<StepOneProps> = ({
                 >
                   <Center {...getRootProps()}>
                     <input {...getInputProps()} />
-                    {/* {files.length > 0 && ( */}
                     <Button
                       variant={"primary"}
-                      loadingText="Uploading..."
-                      isLoading={uploadLoading}
-                      onClick={() => {
-                        setUploadLoading(true);
-                        if (files.length > 0) {
-                         startUpload(files);
-                        }
-                      }}
                       fontSize={{ base: "xs", md: "md" }}
                     >
                       {getValues("logo") ? "Upload New Image" : "Upload Image"}
                     </Button>
-                    {/* )} */}
                   </Center>
                   <Box
                     textAlign={"start"}

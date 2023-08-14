@@ -44,7 +44,7 @@ export const Tabs = ({
 }) => {
   // get the project id from the url using window object
   return (
-    <ChakraTabs variant={"cubik"} alignSelf={"start"} w="full">
+    <ChakraTabs variant={"cubik"} alignSelf={"start"} w="full" isLazy>
       <TabList
         overflowY={{ base: "hidden", md: "inherit" }}
         overflowX={{ base: "scroll", md: "inherit" }}

@@ -28,7 +28,7 @@ import { Contribution, Proof, User } from "@cubik/database";
 import { formatNumberWithK } from "@/utils/helpers/formatWithK";
 import React from "react";
 import { timeSince } from "@/utils/helpers/timeSince";
-import { getContributors } from "./get-contributors";
+import { getContributors } from "../get-contributors";
 
 type Props = {
   id: string;
@@ -187,24 +187,22 @@ const Contributors = ({ projectId }: { projectId: string }) => {
   const [sortDirection, setSortDirection] = useState("desc");
 
   useEffect(() => {
-    if (!contributors) {
-      (async () => {
-        const _contributors = await getContributors(projectId);
-        setContributors(_contributors);
-      })();
-    }
-  }, [contributors]);
+    (async () => {
+      const _contributors = await getContributors(projectId);
+      setContributors(_contributors);
+    })();
+  }, [projectId]);
 
   console.log("contributors", contributors);
 
-  const pageSize = 15;
-  const siblingCount = 1;
+  // const pageSize = 15;
+  // const siblingCount = 1;
 
-  const totalContributors = contributors ? contributors.length : 0;
-  const totalPages = Math.ceil(totalContributors / pageSize);
+  // const totalContributors = contributors ? contributors.length : 0;
+  // const totalPages = Math.ceil(totalContributors / pageSize);
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
+  // const startIndex = (currentPage - 1) * pageSize;
+  // const endIndex = startIndex + pageSize;
 
   const sortedAndFormattedContributors = contributors;
   // ? formatContributorData(contributorsData).sort((a, b) => {
@@ -218,9 +216,9 @@ const Contributors = ({ projectId }: { projectId: string }) => {
   //   })
   // : [];
 
-  const currentContributors = sortedAndFormattedContributors
-    ? sortedAndFormattedContributors.slice(startIndex, endIndex)
-    : [];
+  // const currentContributors = sortedAndFormattedContributors
+  //   ? sortedAndFormattedContributors.slice(startIndex, endIndex)
+  //   : [];
 
   const handleSortChange = (field: string) => {
     if (field === sortField) {
@@ -235,12 +233,10 @@ const Contributors = ({ projectId }: { projectId: string }) => {
     <VStack
       w="full"
       align={
-        currentContributors?.length === 0
-          ? "center"
-          : { base: "start", md: "end" }
+        contributors?.length === 0 ? "center" : { base: "start", md: "end" }
       }
     >
-      {currentContributors?.length === 0 ? null : ( // <ContributionsEmptyState />
+      {contributors?.length === 0 ? null : ( // <ContributionsEmptyState />
         <>
           <Table w="full" minW="34rem" overflowX="scroll" variant="unstyled">
             <Thead
@@ -319,27 +315,24 @@ const Contributors = ({ projectId }: { projectId: string }) => {
               </Tr>
             </Thead>
             {!contributors ? (
+              // || true
               <TableLoading />
             ) : (
               <Tbody>
-                {currentContributors.length === 0 ? (
-                  <></>
-                ) : (
-                  currentContributors.map((contributor) => (
-                    <ContributorRow
-                      key={contributor.id}
-                      amount={contributor.totalAmount}
-                      token={contributor.token}
-                      timestamp={contributor.createdAt}
-                      avatar={contributor.User.profilePicture!}
-                      usd={contributor.totalUsdAmount}
-                      username={contributor.User.username!}
-                      walletAddress={contributor.User.mainWallet}
-                      id={contributor.User.id}
-                      proof={contributor.User.Proof}
-                    />
-                  ))
-                )}
+                {contributors!.map((contributor) => (
+                  <ContributorRow
+                    key={contributor.id}
+                    amount={contributor.totalAmount}
+                    token={contributor.token}
+                    timestamp={contributor.createdAt}
+                    avatar={contributor.User.profilePicture!}
+                    usd={contributor.totalUsdAmount}
+                    username={contributor.User.username!}
+                    walletAddress={contributor.User.mainWallet}
+                    id={contributor.User.id}
+                    proof={contributor.User.Proof}
+                  />
+                ))}
               </Tbody>
             )}
           </Table>

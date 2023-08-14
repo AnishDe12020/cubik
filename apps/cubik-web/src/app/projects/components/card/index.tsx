@@ -49,7 +49,7 @@ const ProjectCard = ({
   return (
     <LinkBox
       as={Link}
-      href={`/${id}`}
+      href={`/projects/${projectId}`}
       w="full"
       maxW={{
         base: "92vw",

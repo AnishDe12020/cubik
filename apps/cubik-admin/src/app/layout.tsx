@@ -17,6 +17,7 @@ const jakarta = Plus_Jakarta_Sans({
   weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 import Image from "next/image";
+import SelectQuadraticEvent from "@/components/SelectEvent";
 
 export default function RootLayout({
   children,
@@ -29,7 +30,6 @@ export default function RootLayout({
         <ChakraProvider theme={theme}>
           <VStack maxW="full" w="100%" h="100vh" p="0" bg="black">
             {/* <Header /> */}
-
             <Container
               maxW={{ base: "full", md: "7xl" }}
               w="100vw"
@@ -37,6 +37,7 @@ export default function RootLayout({
               px={{ base: "16px" }}
             >
               <Stack
+                zIndex={1}
                 direction={{ base: "column", md: "row" }}
                 gap="40px"
                 w="full"
@@ -85,49 +86,33 @@ export default function RootLayout({
                 }}
               >
                 <HStack
-                  border="1px solid red"
+                  zIndex={1}
                   align={"start"}
                   w="full"
+                  justify={"space-between"}
                   gap={{ base: "6px", md: "8px" }}
                 >
-                  <Box
-                    color="neutral.11"
-                    as="p"
-                    textStyle={{ base: "title1", md: "display3" }}
-                  >
-                    Quadratic Funding Grants
-                  </Box>
+                  <SelectQuadraticEvent />
                   <Center
-                    width={{ base: "100px", md: "112px" }}
-                    height={{ base: "100px", md: "112px" }}
-                    position={{ base: "absolute", md: "relative" }}
-                    right={{ base: "-5%", md: "auto" }}
-                    bottom={{ base: "-5%", md: "auto" }}
-                    // zIndex={'1'}
+                    width={{ base: "80px", md: "130px" }}
+                    height={{ base: "80px", md: "130px" }}
+                    position="relative"
+                    right="auto"
+                    bottom="auto"
+                    zIndex={0}
                   >
-                    <Box
-                      width={{ base: "100px", md: "112px" }}
-                      height={{ base: "100px", md: "112px" }}
-                      position="absolute"
-                      top="0"
-                      left="0"
-                      right="0"
-                      bottom="0"
-                      zIndex="1"
-                      mixBlendMode={"hue"}
-                      bg="#071A0F"
-                    />
-                    {/* <Image
-                      src="https://res.cloudinary.com/demonicirfan/image/upload/v1689923669/Mask_group_4_xmxqdg.png"
-                      alt="Twitter Logo"
+                    <Image
+                      src="/images/solana.svg"
+                      alt="Solana"
                       width={"300"}
                       height={"300"}
-                    /> */}
+                    />
                   </Center>
                 </HStack>
               </Stack>
               <VStack
-                py={{ base: "32px", md: "64px" }}
+                zIndex={1}
+                py={{ base: "16px", md: "16px" }}
                 w="full"
                 align="start"
                 spacing="32px"

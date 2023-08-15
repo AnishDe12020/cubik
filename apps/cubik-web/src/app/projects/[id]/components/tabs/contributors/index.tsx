@@ -186,12 +186,12 @@ const Contributors = ({ projectId }: { projectId: string }) => {
   const [sortField, setSortField] = useState("timestamp");
   const [sortDirection, setSortDirection] = useState("desc");
 
-  useEffect(() => {
-    (async () => {
-      const _contributors = await getContributors(projectId);
-      setContributors(_contributors);
-    })();
-  }, [projectId]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const _contributors = await getContributors(projectId);
+  //     setContributors(_contributors);
+  //   })();
+  // }, [projectId]);
 
   console.log("contributors", contributors);
 
@@ -315,7 +315,6 @@ const Contributors = ({ projectId }: { projectId: string }) => {
               </Tr>
             </Thead>
             {!contributors ? (
-              // || true
               <TableLoading />
             ) : (
               <Tbody>

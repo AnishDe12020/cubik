@@ -21,7 +21,7 @@ import {
   User,
 } from "@cubik/database";
 import Link from "next/link";
-import { Key } from "react";
+import { Key, Suspense } from "react";
 import {
   FaDiscord,
   FaGithub,
@@ -30,6 +30,8 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import { HiLink } from "react-icons/hi";
+import Funding from "./funding";
+import Contributors from "./funding/contributors";
 // import { WalletAddress } from "~/components/common/wallet/WalletAdd";
 // import ComponentErrors from "~/components/errors/ComponentErrors";
 // import { ProjectCreatorTeamType } from "~/types/IProjectDetails";
@@ -39,6 +41,9 @@ import { HiLink } from "react-icons/hi";
 //   ProjectSocialsSkeleton,
 // } from "../skeletons/ProjectPageLoadingSkeleton";
 // import { HackathonSchedule } from "@cubik/common-types";
+
+import { Skeleton as FundingSkeleton } from "./funding/skeleton";
+import { Wrapper } from "@/app/components/common/wrapper";
 
 type ProjectCreatorTeamMemberProps = {
   teamMember: Team[] & {
@@ -572,12 +577,17 @@ export const ProjectCreatorAndLinks = ({
         isLoading={isLoading}
       /> */}
       {!preview && (
-        <ProjectFundingData
-          isLoading={isLoading}
-          contributors={contributors}
-          communityContributions={communityContributions}
-          funding={funding}
-        />
+        // <ProjectFundingData
+        //   isLoading={true}
+        //   contributors={contributors}
+        //   communityContributions={communityContributions}
+        //   funding={funding}
+        // />
+
+        <Wrapper>
+          {/* @ts-expect-error Async Server Component */}
+          <Funding projectId={projectDetails.id!}></Funding>
+        </Wrapper>
       )}
       <ProjectOwner isLoading={isLoading} team={team} />
       {/* <SimilarProject /> */}
@@ -616,6 +626,8 @@ export const Interactions = ({
   hackathonId,
   timeline,
 }: ProjectInteractionsProps) => {
+  console.log(contributors);
+
   return (
     <Stack
       w="full"

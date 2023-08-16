@@ -1,5 +1,6 @@
+"use client";
 import CustomTag from "@/app/components/common/tags/CustomTag";
-import { BONK, SOL, USDC } from "@/app/components/common/tags/TokenTags";
+import { SOL, USDC } from "@/app/components/common/tags/TokenTags";
 import {
   Avatar,
   Box,

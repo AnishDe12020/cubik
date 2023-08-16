@@ -1,6 +1,6 @@
 import React from "react";
-import { ContributionTable } from "../components/user/ContributionTable";
-import { ContributionRow } from "../components/user/ContributionRow";
+import { ContributionTable } from "./ContributionTable";
+import { ContributionRow } from "./ContributionRow";
 import { prisma } from "@cubik/database";
 
 const getContribution = async (username: string) => {
@@ -40,11 +40,10 @@ const getContribution = async (username: string) => {
   });
 };
 
-const ContributionPage = async ({
-  params: { username },
-}: {
-  params: { username: string };
-}) => {
+interface Props {
+  username: string;
+}
+export const ContributionTab = async ({ username }: Props) => {
   const contribution = await getContribution(username);
   return (
     <>
@@ -73,5 +72,3 @@ const ContributionPage = async ({
     </>
   );
 };
-
-export default ContributionPage;

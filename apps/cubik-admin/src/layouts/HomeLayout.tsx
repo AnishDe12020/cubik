@@ -10,8 +10,9 @@ import React from "react";
 
 interface Props {
   children: React.ReactNode;
+  name: string;
 }
-export const HomeLayout = ({ children }: Props) => {
+export const HomeLayout = ({ children, name }: Props) => {
   return (
     <>
       <VStack maxW="full" w="100%" h="100vh" p="0" bg="black">
@@ -78,7 +79,7 @@ export const HomeLayout = ({ children }: Props) => {
               justify={"space-between"}
               gap={{ base: "6px", md: "8px" }}
             >
-              <SelectQuadraticEvent />
+              <SelectQuadraticEvent name={name} />
               <Center
                 width={{ base: "80px", md: "130px" }}
                 height={{ base: "80px", md: "130px" }}

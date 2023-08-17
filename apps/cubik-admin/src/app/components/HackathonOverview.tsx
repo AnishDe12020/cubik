@@ -1,25 +1,20 @@
 import { VStack, HStack, Center, Box } from "@/utils/chakra";
+import { prisma } from "@cubik/database";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
-import { prisma } from "@cubik/database";
+import { fetchOverView } from "./fetchHackathon";
 
 interface Props {
   id: string;
-  type: "hackathon" | "round";
 }
 
-const getOverView = async ({ id, type }: Props) => {
-  if (type === "hackathon") {
-    const res = await prisma.projectJoinHackathon.count({
-      where: {
-        isArchive: false,
-      },
-    });
-  } else {
-  }
-};
-export const HackathonOverview = async ({ id, type }: Props) => {
-  const Overview = await getOverView({ id, type });
+export const HackathonOverview = ({ id }: Props) => {
+  const Overview = useQuery({
+    queryFn: ({ queryKey }) => fetchOverView(queryKey[1] || id),
+    queryKey: ["overview", id],
+    enabled: id ? true : false,
+  });
   return (
     <>
       <VStack
@@ -70,7 +65,7 @@ export const HackathonOverview = async ({ id, type }: Props) => {
               fontWeight={"800"}
               textStyle={{ base: "title1", md: "display5" }}
             >
-              136
+              {Overview.data?.project || 0}
             </Box>
             <Box
               color="#ADB8B6"
@@ -104,7 +99,7 @@ export const HackathonOverview = async ({ id, type }: Props) => {
               fontWeight={"800"}
               textStyle={{ base: "title1", md: "display5" }}
             >
-              412
+              {Overview.data?.tracks || 0}
             </Box>
             <Box
               color="#ADB8B6"

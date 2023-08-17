@@ -13,13 +13,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Portal, Skeleton, Tag } from "@chakra-ui/react";
 const MotionBox = motion(Box);
 import Image from "next/image";
-import { useUser } from "@/context/user";
 
-const SelectQuadraticEvent = () => {
+interface Props {
+  name: string;
+}
+const SelectQuadraticEvent = ({ name }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const myDiv = useRef<HTMLDivElement | null>(null);
-  const { currentOpen, user } = useUser();
   const handleClick = () => {
     setTimeout(() => {
       onOpen();
@@ -53,7 +54,7 @@ const SelectQuadraticEvent = () => {
           textStyle={{ base: "title2", sm: "title1", md: "display5" }}
           h="2rem"
         >
-          {currentOpen?.name || "Select Event"}
+          {name || "Select Event"}
         </Box>
         <Center
           pt={["0px", "2px", "10px"]}

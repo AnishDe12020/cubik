@@ -48,6 +48,10 @@ import {
 import Image from "next/image";
 import { sponsorsData } from "./sponsors";
 import { useMemo, useState, Fragment, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useUser } from "@/context/user";
+import { fetchOverView } from "../../fetchHackathon";
+import { fetchHackathon } from "./fetchSponsors";
 
 type InnerTableProps = {
   projectId: string;
@@ -117,7 +121,7 @@ const ProjectStatusModal = ({
           textTransform={"capitalize"}
         >
           {status}
-        </Box> 
+        </Box>
         <Center
           onClick={onOpen}
           width={{ base: "16px", sm: "18px", md: "20px" }}
@@ -221,7 +225,10 @@ const ProjectStatusModal = ({
                     }}
                   >
                     {prizeBreakdown.map((prize, index) => (
-                      <option key={index} value={prize.value}> {prize.title}</option>
+                      <option key={index} value={prize.value}>
+                        {" "}
+                        {prize.title}
+                      </option>
                     ))}
                   </Select>
                 </Center>
@@ -454,7 +461,7 @@ const InnerTable = ({
         },
       },
     ],
-   []
+    []
   );
 
   const innerTableInstance = useReactTable({
@@ -496,7 +503,7 @@ const InnerTable = ({
   return (
     <ChakraTable px="4rem" size="sm" variant="unstyled">
       <Thead color="neutral.8" fontFamily={"Plus Jakarta Sans, sans-serif"}>
-        {innerTableInstance.getHeaderGroups().map((headerGroup) => (
+        {innerTableInstance?.getHeaderGroups().map((headerGroup) => (
           <Tr key={headerGroup.id}>
             {headerGroup.headers.map((header, index) => (
               <Th
@@ -518,11 +525,11 @@ const InnerTable = ({
         ))}
       </Thead>
       <Tbody>
-        {innerTableInstance.getRowModel().rows.map((innerRow, rowIndex) => (
+        {innerTableInstance?.getRowModel().rows.map((innerRow, rowIndex) => (
           <Fragment key={innerRow.id}>
             <Tr>
               {innerRow.getVisibleCells().map((cell, cellIndex) => (
-                <Td 
+                <Td
                   fontSize={{ base: "14px", md: "16px" }}
                   fontWeight="600"
                   p="16px"
@@ -555,20 +562,27 @@ const HackathonSponsorsView = () => {
       [rowId]: !prev[rowId],
     }));
   };
-
+  const { currentOpen } = useUser();
+  const SponsorTracks = useQuery({
+    queryFn: ({ queryKey }) =>
+      fetchHackathon((queryKey[1] as string) || (currentOpen?.id as string)),
+    queryKey: ["overview", currentOpen?.id],
+    enabled: currentOpen?.id ? true : false,
+  });
   const data = useMemo(() => {
-    return sponsorsData.map((sponsor) => {
+    console.log("sponsor tracks - ", SponsorTracks.data);
+    if (!SponsorTracks.data) return [];
+    return SponsorTracks.data?.map((sponsor) => {
       return {
         track: sponsor.name,
-        prizePool: sponsor?.prize.map(
+        prizePool: (sponsor?.prize as any[]).map(
           (prize: { value: number; unit: string }) => {
             return `${prize.value} ${prize.unit}`;
           }
         ),
-        // these are random numbers @dhruv fix this also
         submissions: Math.floor(Math.random() * 100),
         contributions: Math.floor(Math.random() * 100),
-        prizeBreakdown: sponsor.prizeBreakdown,
+        prizeBreakdown: [],
       };
     });
   }, []);
@@ -598,7 +612,7 @@ const HackathonSponsorsView = () => {
   );
 
   const tableInstance = useReactTable({
-    data: data,
+    data: data!,
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -626,7 +640,7 @@ const HackathonSponsorsView = () => {
                 ></Th>
                 {headerGroup.headers.map((header, index) => (
                   <Th
-                  key={index}
+                    key={index}
                     p="16px"
                     fontWeight="600"
                     fontSize={{ base: "12px", md: "14px" }}

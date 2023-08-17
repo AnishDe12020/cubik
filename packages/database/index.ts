@@ -19,5 +19,5 @@ if (typeof window === 'undefined') {
     prisma = global.prisma;
   }
 }
-
+// const prisma = new PrismaClient();
 export { prisma };  

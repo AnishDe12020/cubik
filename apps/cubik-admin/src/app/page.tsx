@@ -21,8 +21,12 @@ import { EventStatus } from "@/app/components/EventStatus";
 import { CountdownTimer } from "@/app/components/CountdownTimer";
 import HackathonSponsorsView from "@/app/components/Hackathon/Sponsors/SponsorsView";
 import { HomeLayout } from "@/layouts/HomeLayout";
-import { HackathonOverview } from "@/app/components/HackathonOverview";
+import { useQuery } from "@tanstack/react-query";
+import { fetchHackathon } from "./components/fetchHackathon";
 import { useUser } from "@/context/user";
+import { HackathonOverview } from "./components/HackathonOverview";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useRouter } from "next/navigation";
 
 // export const metadata: Metadata = {
 //   title: "Cubik - Dashboard",
@@ -89,8 +93,19 @@ const GrantAdminDashboardOverview = ({
 
 export default function Home() {
   const { currentOpen } = useUser();
+  const router = useRouter();
+  const { publicKey } = useWallet();
+
+  if (!publicKey) return router.push("/login");
+
+  const hackathon = useQuery({
+    queryFn: ({ queryKey }) => fetchHackathon(queryKey[1] as string),
+    queryKey: ["event", currentOpen?.id],
+    enabled: currentOpen ? true : false,
+  });
+
   return (
-    <HomeLayout>
+    <HomeLayout name={currentOpen?.name as string}>
       <VStack
         zIndex={1}
         gap={{ base: "48px", sm: "64px", md: "80px" }}
@@ -100,7 +115,7 @@ export default function Home() {
       >
         <HackathonOverview
           id={currentOpen?.id as string}
-          type={currentOpen?.type as any}
+          // type={currentOpen?.type as any}
         />
         <VStack w="full" gap={["8px", "12px", "16px"]} align="start">
           <HStack gap={["2px", "4px", "6px"]}>

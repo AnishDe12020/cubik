@@ -1,30 +1,44 @@
+"use client";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { saveSession } from "@/utils/helpers/saveSession";
-
+import { AdminAccess } from "@cubik/database";
 export interface User {
   username: string;
   profilePicture: string;
   mainWallet: string;
 }
+export interface CurrentOpen {
+  id: string;
+  name: string;
+  type: "round" | "hackathon";
+}
 
 interface UserContextType {
   user: User | null;
+  access: AdminAccess[];
+  setAccess: (access: AdminAccess[]) => void;
   setUser: (userData: User | null) => void;
   logout: () => void;
+  currentOpen: CurrentOpen | null;
+  setCurrentOpen: (currentOpen: CurrentOpen) => void;
 }
 
 const UserContext = createContext<UserContextType>({
   user: null,
   setUser: () => {},
   logout: () => {},
+  access: [],
+  setAccess: () => {},
+  currentOpen: null,
+  setCurrentOpen: () => {},
 });
 
 export const useUser = () => useContext(UserContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [access, setAccess] = useState<AdminAccess[]>([]);
+  const [currentOpen, setCurrentOpen] = useState<CurrentOpen | null>(null);
   const { publicKey, disconnect } = useWallet();
 
   const logout = () => {
@@ -46,23 +60,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [publicKey, user]);
 
-  const track = async () => {
-    const {
-      data: { ip, userAgent },
-    } = await axios.get("/api/track");
-
-    saveSession(user!.mainWallet, {
-      ip,
-      userAgent,
-    });
-  };
-
-  useEffect(() => {
-    user && track();
-  }, [user]);
-
   return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        logout,
+        access,
+        setAccess,
+        currentOpen,
+        setCurrentOpen,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

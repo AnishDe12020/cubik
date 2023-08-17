@@ -1,6 +1,11 @@
-import SelectQuadraticEvent from "@/components/SelectEvent";
+"use client";
+import SelectQuadraticEvent from "@/app/components/SelectEvent";
+import { useUser } from "@/context/user";
 import { VStack, Container, Stack, HStack, Center } from "@/utils/chakra";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface Props {

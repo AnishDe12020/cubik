@@ -1,4 +1,5 @@
 "use client";
+import { AuthProvider } from "@/context/user";
 import WalletContext from "@/context/walletContext";
 import { Provider } from "@/layouts/Provider";
 import { Plus_Jakarta_Sans } from "next/font/google";
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jakarta.className}`}>
         <WalletContext>
-          <Provider>{children}</Provider>
+          <AuthProvider>
+            <Provider>{children}</Provider>
+          </AuthProvider>
         </WalletContext>
       </body>
     </html>

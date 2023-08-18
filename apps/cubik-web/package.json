@@ -49,6 +49,7 @@
     "framer-motion": "^10.3.2",
     "html-react-parser": "^3.0.12",
     "next": "^13.4.16",
+    "next-axiom": "1.0.0-rc.1",
     "react": "18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",

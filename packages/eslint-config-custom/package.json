@@ -5,7 +5,7 @@
   "license": "MIT",
   "files": [
     "./base.js",
-    "./nextjs.js",
+    "./next.js",
     "./react.js"
   ],
   "dependencies": {
@@ -23,6 +23,12 @@
   "devDependencies": {
     "eslint": "^8.45.0",
     "typescript": "^5.1.6"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "./base.js"
+    ]
   },
   "publishConfig": {
     "access": "public"
